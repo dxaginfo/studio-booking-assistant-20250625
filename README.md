@@ -8,7 +8,7 @@ A comprehensive web application for recording studios to manage bookings, coordi
 
 The Studio Booking Assistant is designed to streamline the process of managing recording studio bookings, coordinating with staff, and distributing preparation materials to clients. The system aims to optimize studio utilization, reduce administrative overhead, and enhance the client experience through automation and intuitive interfaces.
 
-## ✨ Features
+## ⚙️ Features
 
 - **User Authentication & Profiles**: Secure login for studio admins, staff, and clients with role-based access control
 - **Real-time Booking Calendar**: Interactive calendar showing availability across multiple studio rooms
@@ -60,7 +60,7 @@ The application follows a microservices-based architecture with:
 4. **Data Layer**: MongoDB, Redis, and S3
 5. **External Integrations**: Payment processing, email, SMS, and calendar systems
 
-## 📦 Installation
+## 🚀 Installation
 
 ### Prerequisites
 - Node.js (v16+)
@@ -141,7 +141,7 @@ npm test
 
 API documentation is available at `/api-docs` when running the server.
 
-## 📊 Database Schema
+## 🗄 Database Schema
 
 The database is designed with the following main collections:
 - Users (admins, staff, clients)
@@ -176,7 +176,7 @@ Detailed deployment instructions are available in the [deployment guide](./docs/
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🤝 Contributing
+## 🙏 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -186,7 +186,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## ✨ Acknowledgements
+## ⚡ Acknowledgements
 
 - [React](https://reactjs.org/)
 - [Node.js](https://nodejs.org/)
