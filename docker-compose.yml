@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # Backend API service
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: studio-booking-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - studio-network
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/studio-booking-assistant
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your_jwt_secret_here
+      - JWT_EXPIRE=24h
+      - EMAIL_SERVICE=sendgrid
+      - EMAIL_USERNAME=apikey
+      - EMAIL_PASSWORD=your_sendgrid_key_here
+      - EMAIL_FROM=your_email@example.com
+      - STRIPE_SECRET_KEY=your_stripe_secret_key
+      - STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+      - AWS_ACCESS_KEY_ID=your_aws_access_key
+      - AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+      - AWS_REGION=us-east-1
+      - AWS_S3_BUCKET=your-bucket-name
+      - TWILIO_ACCOUNT_SID=your_twilio_account_sid
+      - TWILIO_AUTH_TOKEN=your_twilio_auth_token
+      - TWILIO_PHONE_NUMBER=your_twilio_phone_number
+
+  # Frontend client service
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: studio-booking-client
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - studio-network
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:5000
+
+  # MongoDB database
+  mongo:
+    image: mongo:6.0
+    container_name: studio-booking-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    networks:
+      - studio-network
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=studio-booking-assistant
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7.0-alpine
+    container_name: studio-booking-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - studio-network
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  # MongoDB admin interface (optional)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: studio-booking-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - studio-network
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=password
+
+# Define networks
+networks:
+  studio-network:
+    driver: bridge
+
+# Define volumes
+volumes:
+  mongo-data:
+    driver: local
+  redis-data:
+    driver: local
